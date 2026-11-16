@@ -1,0 +1,2567 @@
+<!doctype html>
+<html lang="uk">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <title>Адаптивна верстка: інтерактивний урок</title>
+    <style>
+      :root {
+        --bg: #f6f7fb;
+        --card: #fff;
+        --tx: #1c2030;
+        --mu: #5a6178;
+        --ac: #5b5bf0;
+        --ac2: #14b8a6;
+        --wa: #f59e0b;
+        --bd: #e2e5f0;
+        --code: #12142a;
+        --codetx: #d8dcff;
+        box-sizing: border-box;
+        padding-top: env(safe-area-inset-top, 0px);
+        padding-bottom: env(safe-area-inset-bottom, 0px);
+      }
+      @media (prefers-color-scheme: dark) {
+        :root:not([data-theme="light"]) {
+          --bg: #0f1220;
+          --card: #181c30;
+          --tx: #eef0ff;
+          --mu: #a3a9c6;
+          --bd: #2a3050;
+          --ac: #8c8cff;
+          --code: #0a0c19;
+        }
+      }
+      :root[data-theme="dark"] {
+        --bg: #0f1220;
+        --card: #181c30;
+        --tx: #eef0ff;
+        --mu: #a3a9c6;
+        --bd: #2a3050;
+        --ac: #8c8cff;
+        --code: #0a0c19;
+      }
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+      html {
+        scroll-padding-top: env(safe-area-inset-top, 0px);
+        scroll-behavior: smooth;
+      }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--tx);
+        font:
+          clamp(1rem, 0.95rem + 0.25vw, 1.125rem)/1.65 system-ui,
+          -apple-system,
+          "Segoe UI",
+          Roboto,
+          sans-serif;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        html {
+          scroll-behavior: auto;
+        }
+        * {
+          transition: none !important;
+        }
+      }
+      .wrap {
+        max-width: 62rem;
+        margin-inline: auto;
+        padding: 0 clamp(1rem, 4vw, 2rem);
+      }
+      header.hero {
+        padding: clamp(2.5rem, 8vw, 5rem) 0 2rem;
+        background: linear-gradient(135deg, var(--ac), var(--ac2));
+        color: #fff;
+      }
+      .hero h1 {
+        font-size: clamp(1.9rem, 6vw, 3.4rem);
+        line-height: 1.1;
+        margin: 0 0 0.6rem;
+      }
+      .hero p {
+        max-width: 40rem;
+        margin: 0;
+        opacity: 0.95;
+      }
+      nav {
+        position: sticky;
+        top: env(safe-area-inset-top, 0px);
+        z-index: 5;
+        background: var(--card);
+        border-bottom: 1px solid var(--bd);
+      }
+      nav .wrap {
+        display: flex;
+        gap: 0.25rem;
+        overflow-x: auto;
+        padding-block: 0.4rem;
+      }
+      nav a {
+        white-space: nowrap;
+        color: var(--tx);
+        text-decoration: none;
+        padding: 0.35rem 0.8rem;
+        border-radius: 2rem;
+        font-size: 0.9rem;
+      }
+      nav a:hover {
+        background: var(--bd);
+      }
+      section {
+        padding: 2.2rem 0;
+      }
+      h2 {
+        font-size: clamp(1.4rem, 3.5vw, 2rem);
+        margin: 0 0 0.8rem;
+      }
+      h3 {
+        margin: 0.2rem 0 0.4rem;
+      }
+      .card {
+        background: var(--card);
+        border: 1px solid var(--bd);
+        border-radius: 1rem;
+        padding: 1.2rem;
+      }
+      .grid {
+        display: grid;
+        gap: 1rem;
+        grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+      }
+      .analogy {
+        border-left: 5px solid var(--wa);
+        background: color-mix(in srgb, var(--wa) 14%, var(--card));
+        padding: 0.8rem 1rem;
+        border-radius: 0.6rem;
+        margin: 1rem 0;
+      }
+      .analogy b {
+        color: var(--wa);
+      }
+      pre {
+        background: var(--code);
+        color: var(--codetx);
+        padding: 1rem;
+        border-radius: 0.8rem;
+        overflow-x: auto;
+        font-size: 0.88rem;
+        line-height: 1.5;
+        margin: 0.6rem 0;
+      }
+      code {
+        font-family: ui-monospace, Menlo, Consolas, monospace;
+      }
+      p code,
+      li code,
+      td code {
+        background: var(--bd);
+        padding: 0.1rem 0.35rem;
+        border-radius: 0.3rem;
+        font-size: 0.88em;
+      }
+      button {
+        font: inherit;
+        cursor: pointer;
+      }
+      .tabs {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+        margin-bottom: 0.8rem;
+      }
+      .tab {
+        border: 2px solid var(--ac);
+        background: transparent;
+        color: var(--ac);
+        padding: 0.4rem 1rem;
+        border-radius: 2rem;
+        font-weight: 600;
+      }
+      .tab[aria-selected="true"] {
+        background: var(--ac);
+        color: #fff;
+      }
+      .pane[hidden] {
+        display: none;
+      }
+      .tl {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        border-left: 3px solid var(--ac);
+      }
+      .tl li {
+        padding: 0 0 1rem 1.2rem;
+        position: relative;
+      }
+      .tl li::before {
+        content: "";
+        position: absolute;
+        left: -9px;
+        top: 0.5rem;
+        width: 15px;
+        height: 15px;
+        border-radius: 50%;
+        background: var(--ac2);
+      }
+      .tl b {
+        color: var(--ac);
+      }
+      .tablewrap {
+        overflow-x: auto;
+      }
+      table {
+        border-collapse: collapse;
+        width: 100%;
+        min-width: 30rem;
+      }
+      th,
+      td {
+        padding: 0.6rem;
+        border-bottom: 1px solid var(--bd);
+        text-align: left;
+      }
+      .lab {
+        display: grid;
+        gap: 1rem;
+      }
+      .ctrl {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.8rem 1.5rem;
+        align-items: center;
+      }
+      input[type="range"] {
+        flex: 1 1 14rem;
+        accent-color: var(--ac);
+      }
+      .badge {
+        display: inline-block;
+        padding: 0.2rem 0.7rem;
+        border-radius: 2rem;
+        background: var(--ac2);
+        color: #06251f;
+        font-weight: 700;
+      }
+      .stage {
+        background: repeating-linear-gradient(
+          45deg,
+          var(--bd) 0 10px,
+          transparent 10px 20px
+        );
+        border-radius: 1rem;
+        padding: 0.8rem;
+        overflow-x: auto;
+      }
+      iframe {
+        display: block;
+        margin-inline: auto;
+        max-width: 100%;
+        height: 24rem;
+        border: 3px solid var(--ac);
+        border-radius: 0.8rem;
+        background: #fff;
+        transition: width 0.15s;
+      }
+      .q {
+        margin-bottom: 1.2rem;
+      }
+      .opts {
+        display: grid;
+        gap: 0.5rem;
+      }
+      .opt {
+        text-align: left;
+        padding: 0.6rem 0.9rem;
+        border-radius: 0.7rem;
+        border: 2px solid var(--bd);
+        background: var(--card);
+        color: var(--tx);
+      }
+      .opt:hover:not(:disabled) {
+        border-color: var(--ac);
+      }
+      .opt.ok {
+        border-color: #16a34a;
+        background: color-mix(in srgb, #16a34a 18%, var(--card));
+      }
+      .opt.no {
+        border-color: #dc2626;
+        background: color-mix(in srgb, #dc2626 18%, var(--card));
+      }
+      .exp {
+        margin: 0.4rem 0 0;
+        color: var(--mu);
+        font-size: 0.95rem;
+      }
+      .score {
+        font-size: 1.2rem;
+        font-weight: 700;
+      }
+      .themebtn {
+        float: right;
+        background: rgba(255, 255, 255, 0.2);
+        color: #fff;
+        border: 1px solid rgba(255, 255, 255, 0.6);
+        border-radius: 2rem;
+        padding: 0.3rem 0.8rem;
+      }
+      footer {
+        padding: 2rem 0 3rem;
+        color: var(--mu);
+        text-align: center;
+      }
+      #cheat .card {
+        min-width: 0;
+      }
+      #cheat li {
+        margin-bottom: 0.25rem;
+      }
+      @media print {
+        header.hero,
+        nav,
+        footer,
+        main > section:not(#cheat),
+        .noprint {
+          display: none !important;
+        }
+        body {
+          background: #fff;
+          color: #000;
+          font-size: 10.5pt;
+          line-height: 1.45;
+        }
+        #cheat {
+          padding: 0;
+        }
+        #cheat h2 {
+          margin-top: 0;
+        }
+        .card {
+          border: 1px solid #999;
+          box-shadow: none;
+          background: #fff !important;
+          break-inside: avoid;
+          padding: 0.6rem;
+        }
+        pre {
+          background: #f3f3f3 !important;
+          color: #000 !important;
+          white-space: pre-wrap;
+          border: 1px solid #ccc;
+          font-size: 9pt;
+          padding: 0.5rem;
+        }
+        code,
+        p code,
+        li code,
+        td code {
+          color: #000;
+          background: #eee;
+        }
+      }
+
+      /* Оновлений інтерфейс уроку: зручна навігація й адаптивна типографіка */
+      :root {
+        --shadow: 0 14px 38px rgba(25, 35, 79, 0.065);
+        --radius: 18px;
+        --navh: 66px;
+      }
+      html {
+        scroll-padding-top: calc(var(--navh) + 22px);
+      }
+      body {
+        line-height: 1.68;
+        overflow-wrap: break-word;
+      }
+      .wrap {
+        max-width: 72rem;
+        padding-inline: clamp(1rem, 3.5vw, 2.25rem);
+      }
+      header.hero {
+        position: relative;
+        overflow: hidden;
+        padding: clamp(3rem, 7vw, 5.5rem) 0 clamp(2.5rem, 5vw, 4rem);
+        background: linear-gradient(
+          118deg,
+          #3736a3 0%,
+          #6158de 49%,
+          #169d9e 100%
+        );
+      }
+      header.hero::after {
+        content: "";
+        position: absolute;
+        right: -8rem;
+        top: -11rem;
+        width: 32rem;
+        height: 32rem;
+        border: 1px solid #ffffff44;
+        border-radius: 50%;
+        pointer-events: none;
+        box-shadow:
+          0 0 0 5rem #ffffff0b,
+          0 0 0 10rem #ffffff07;
+      }
+      .hero .wrap {
+        position: relative;
+        z-index: 1;
+      }
+      .hero h1 {
+        max-width: 53rem;
+        font-weight: 800;
+        letter-spacing: -0.045em;
+        line-height: 1.13;
+      }
+      .hero p {
+        font-size: clamp(1rem, 1.2vw, 1.17rem);
+        line-height: 1.7;
+        max-width: 50rem;
+      }
+      .themebtn {
+        float: none;
+        position: absolute;
+        right: 0;
+        top: -1.35rem;
+        backdrop-filter: blur(10px);
+        padding: 0.5rem 0.9rem;
+        font-size: 0.9rem;
+      }
+      .lesson-nav {
+        top: env(safe-area-inset-top, 0px);
+        z-index: 50;
+        box-shadow: 0 4px 18px rgba(20, 25, 60, 0.055);
+      }
+      .nav-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        min-height: var(--navh);
+        padding-block: 0.45rem !important;
+        overflow: visible !important;
+      }
+      .lesson-nav .nav-brand {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.65rem;
+        padding: 0;
+        border-radius: 0;
+        font-size: 0.94rem;
+        font-weight: 800;
+        letter-spacing: -0.015em;
+      }
+      .nav-brand:hover {
+        background: transparent;
+      }
+      .brand-symbol {
+        display: grid;
+        place-items: center;
+        flex: none;
+        width: 35px;
+        height: 35px;
+        border-radius: 11px;
+        background: var(--ac);
+        color: white;
+        font-size: 0.93rem;
+      }
+      .nav-location {
+        color: var(--mu);
+        font-size: 0.86rem;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .nav-actions {
+        display: flex;
+        align-items: center;
+        gap: 0.55rem;
+        flex: none;
+      }
+      .lesson-nav .nav-cheat {
+        display: flex;
+        align-items: center;
+        gap: 0.3rem;
+        padding: 0.58rem 0.85rem;
+        background: color-mix(in srgb, var(--ac) 10%, var(--card));
+        color: var(--ac);
+        border: 1px solid color-mix(in srgb, var(--ac) 25%, var(--bd));
+        font-weight: 700;
+        border-radius: 12px;
+        font-size: 0.88rem;
+      }
+      .nav-cheat:hover {
+        background: color-mix(in srgb, var(--ac) 17%, var(--card));
+      }
+      .nav-menu-button {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        border: 1px solid var(--bd);
+        border-radius: 12px;
+        background: var(--card);
+        color: var(--tx);
+        font-size: 0.9rem;
+        font-weight: 750;
+        padding: 0.51rem 0.8rem;
+      }
+      .nav-menu-button:hover,
+      .nav-menu-button[aria-expanded="true"] {
+        border-color: var(--ac);
+        background: color-mix(in srgb, var(--ac) 8%, var(--card));
+      }
+      .menu-arrow {
+        font-size: 1.1rem;
+        line-height: 1;
+        transition: transform 0.2s;
+      }
+      .nav-menu-button[aria-expanded="true"] .menu-arrow {
+        transform: rotate(180deg);
+      }
+      .nav-dropdown {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        z-index: 51;
+        max-height: min(76dvh, 690px);
+        overflow-y: auto;
+        overscroll-behavior: contain;
+        padding: 1.3rem 0 1.55rem;
+        background: var(--card);
+        border-bottom: 1px solid var(--bd);
+        box-shadow: 0 20px 35px rgba(16, 23, 54, 0.16);
+      }
+      .nav-dropdown[hidden] {
+        display: none;
+      }
+      .nav-dropdown-heading {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        gap: 1rem;
+        margin-bottom: 0.85rem;
+      }
+      .nav-dropdown-heading strong {
+        font-size: 1.04rem;
+      }
+      .nav-dropdown-heading span {
+        color: var(--mu);
+        font-size: 0.83rem;
+      }
+      .nav-link-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 0.45rem;
+      }
+      .lesson-nav .nav-link-grid a {
+        display: flex;
+        align-items: center;
+        white-space: normal;
+        gap: 0.65rem;
+        padding: 0.7rem 0.8rem;
+        border: 1px solid transparent;
+        border-radius: 12px;
+        font-weight: 600;
+        font-size: 0.9rem;
+        line-height: 1.3;
+      }
+      .lesson-nav .nav-link-grid a:hover {
+        background: var(--bg);
+        border-color: var(--bd);
+      }
+      .lesson-nav .nav-link-grid a.active {
+        background: color-mix(in srgb, var(--ac) 11%, var(--card));
+        border-color: color-mix(in srgb, var(--ac) 35%, var(--bd));
+        color: var(--ac);
+      }
+      .nav-number {
+        font-size: 0.78rem;
+        color: var(--mu);
+        font-variant-numeric: tabular-nums;
+        min-width: 1.8rem;
+      }
+      .nav-link-grid a.active .nav-number {
+        color: var(--ac);
+      }
+      main.wrap {
+        padding-block: 1rem 3rem;
+      }
+      main > section {
+        padding: clamp(2.15rem, 4.5vw, 3.2rem) 0;
+        scroll-margin-top: calc(var(--navh) + 18px);
+        border-bottom: 1px solid var(--bd);
+      }
+      main > section:last-child {
+        border-bottom: 0;
+      }
+      h2 {
+        font-size: clamp(1.55rem, 2.4vw, 2.15rem);
+        letter-spacing: -0.035em;
+        line-height: 1.23;
+        margin-bottom: 1.1rem;
+      }
+      h3 {
+        font-size: clamp(1.08rem, 1.55vw, 1.24rem);
+        line-height: 1.35;
+        margin: 0.7rem 0 0.65rem;
+      }
+      p {
+        margin-block: 0.7rem 1rem;
+      }
+      .card {
+        padding: clamp(1rem, 2.1vw, 1.55rem);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        min-width: 0;
+      }
+      .card p:last-child {
+        margin-bottom: 0;
+      }
+      .grid {
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
+        gap: 1rem;
+      }
+      .analogy {
+        border-left-width: 4px;
+        padding: 1rem 1.2rem;
+        border-radius: 0 12px 12px 0;
+      }
+      pre {
+        padding: 1.15rem;
+        border-radius: 12px;
+        max-width: 100%;
+        tab-size: 2;
+      }
+      .tablewrap {
+        max-width: 100%;
+        border-radius: var(--radius);
+      }
+      table {
+        font-size: 0.93rem;
+      }
+      th {
+        font-weight: 750;
+        background: color-mix(in srgb, var(--ac) 7%, var(--card));
+      }
+      th,
+      td {
+        padding: 0.78rem 0.85rem;
+        vertical-align: top;
+      }
+      button,
+      a,
+      input {
+        touch-action: manipulation;
+      }
+      a:focus-visible,
+      button:focus-visible,
+      input:focus-visible {
+        outline: 3px solid var(--ac2);
+        outline-offset: 3px;
+      }
+      .tab,
+      .opt {
+        transition:
+          background 0.15s,
+          border-color 0.15s,
+          transform 0.15s;
+      }
+      .tab:hover {
+        background: color-mix(in srgb, var(--ac) 9%, var(--card));
+      }
+      .tab[aria-selected="true"]:hover {
+        background: var(--ac);
+      }
+      .lab {
+        gap: 1rem;
+      }
+      .stage {
+        max-width: 100%;
+        border: 1px solid var(--bd);
+        padding: clamp(0.5rem, 2vw, 1rem);
+        scrollbar-width: thin;
+      }
+      .ctrl {
+        gap: 0.65rem 1rem;
+      }
+      input[type="range"] {
+        min-width: 0;
+      }
+      #vbox {
+        max-width: 100%;
+      }
+      #cheat > .grid {
+        gap: 1rem;
+        align-items: start;
+      }
+      #cheat .card {
+        border-top: 3px solid color-mix(in srgb, var(--ac) 55%, var(--ac2));
+      }
+      #cheat .card h3 {
+        display: flex;
+        align-items: center;
+        gap: 0.35rem;
+        margin-top: 0;
+        margin-bottom: 0.9rem;
+      }
+      #cheat .card ul {
+        padding-left: 1.2rem;
+        margin: 0.4rem 0;
+      }
+      #cheat .card li {
+        margin-bottom: 0.6rem;
+        line-height: 1.52;
+      }
+      #cheat .card pre {
+        font-size: 0.8rem;
+      }
+      #cheat .grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      #quiz .q {
+        padding-bottom: 1.15rem;
+        margin-bottom: 1.15rem;
+        border-bottom: 1px solid var(--bd);
+      }
+      #quiz .q:last-child {
+        border-bottom: 0;
+        margin-bottom: 0;
+        padding-bottom: 0;
+      }
+      #quiz .opts {
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+      }
+      .opt {
+        min-height: 49px;
+      }
+      footer {
+        border-top: 1px solid var(--bd);
+      }
+      @media (max-width: 850px) {
+        .nav-link-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+        .nav-location {
+          display: none;
+        }
+        #cheat .grid {
+          grid-template-columns: 1fr;
+        }
+      }
+      @media (max-width: 560px) {
+        :root {
+          --navh: 60px;
+        }
+        .brand-label {
+          display: none;
+        }
+        .brand-symbol {
+          width: 33px;
+          height: 33px;
+        }
+        .nav-actions {
+          gap: 0.35rem;
+        }
+        .lesson-nav .nav-cheat {
+          padding: 0.52rem 0.58rem;
+        }
+        .nav-cheat span {
+          display: none;
+        }
+        .nav-menu-button {
+          padding: 0.5rem 0.6rem;
+        }
+        .nav-dropdown {
+          max-height: calc(
+            100dvh - var(--navh) - env(safe-area-inset-top, 0px)
+          );
+          padding: 0.95rem 0 1.4rem;
+        }
+        .nav-link-grid {
+          grid-template-columns: 1fr;
+          gap: 0.2rem;
+        }
+        .nav-dropdown-heading {
+          margin-bottom: 0.6rem;
+        }
+        .lesson-nav .nav-link-grid a {
+          padding: 0.75rem 0.65rem;
+        }
+        .hero h1 {
+          padding-top: 1.2rem;
+        }
+        .themebtn {
+          top: -1.6rem;
+        }
+        main > section {
+          padding: 2rem 0;
+        }
+        .card {
+          border-radius: 14px;
+        }
+        .tablewrap {
+          margin-inline: 0;
+        }
+        .tabs {
+          flex-wrap: wrap;
+        }
+        .tabs .tab {
+          flex: 1 1 12rem;
+        }
+        .ctrl input[type="range"] {
+          flex-basis: 100%;
+        }
+        .lab .ctrl .tab {
+          flex: 1 1 auto;
+        }
+        .badge {
+          font-size: 0.9rem;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .menu-arrow,
+        .tab,
+        .opt {
+          transition: none;
+        }
+      }
+      /* Друкуємо тільки шпаргалку, повністю скасовуючи екранні декоративні стилі. */
+      @media print {
+        :root {
+          --shadow: none;
+        }
+        html,
+        body {
+          scroll-behavior: auto !important;
+        }
+        main.wrap {
+          padding: 0;
+          max-width: none;
+        }
+        main > section#cheat {
+          padding: 0;
+          border: 0;
+          break-before: auto;
+        }
+        #cheat .grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 0.45rem;
+        }
+        #cheat .card {
+          border: 1px solid #999;
+          border-top: 2px solid #777;
+          box-shadow: none;
+          border-radius: 5px;
+          padding: 0.55rem;
+          break-inside: avoid;
+        }
+        #cheat .card h3 {
+          font-size: 11pt;
+          margin: 0 0 0.35rem;
+        }
+        #cheat .card li {
+          margin-bottom: 0.2rem;
+          line-height: 1.35;
+        }
+        #cheat .card pre {
+          font-size: 8pt;
+          white-space: pre-wrap;
+          overflow-wrap: anywhere;
+        }
+        #cheat h2 {
+          font-size: 16pt;
+        }
+      }
+
+      /* Mobile navigation: a self-scrolling sheet, no page scrolling underneath. */
+      .nav-backdrop {
+        position: fixed;
+        inset: 0;
+        background: rgba(12, 16, 34, 0.5);
+        z-index: 49;
+        backdrop-filter: blur(2px);
+      }
+      .nav-backdrop[hidden] {
+        display: none !important;
+      }
+      @media (max-width: 700px) {
+        :root {
+          --navh: 64px;
+        }
+        .lesson-nav {
+          isolation: isolate;
+        }
+        .nav-inner {
+          min-height: var(--navh);
+          gap: 0.4rem;
+        }
+        .lesson-nav .nav-brand {
+          min-width: 0;
+          flex: 1 1 auto;
+        }
+        .brand-label {
+          display: block;
+          max-width: 35vw;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          font-size: 0.83rem;
+        }
+        .nav-actions {
+          gap: 0.4rem;
+        }
+        .nav-cheat {
+          min-height: 44px;
+          justify-content: center;
+        }
+        .nav-menu-button {
+          min-height: 44px;
+          gap: 0.4rem;
+          white-space: nowrap;
+        }
+        .nav-dropdown {
+          position: fixed;
+          top: var(--menu-top, 64px);
+          bottom: 0;
+          left: 0;
+          right: 0;
+          z-index: 51;
+          max-height: none;
+          overflow-y: auto;
+          overscroll-behavior: contain;
+          -webkit-overflow-scrolling: touch;
+          padding: 1.15rem 0 calc(1.5rem + env(safe-area-inset-bottom, 0px));
+          border-radius: 0;
+          box-shadow: 0 18px 26px #0002;
+        }
+        .nav-dropdown .wrap {
+          width: 100%;
+          max-width: 42rem;
+          padding-inline: 1rem;
+          flex-direction: column;
+        }
+        .nav-dropdown-heading {
+          align-items: center;
+          margin-bottom: 1rem;
+        }
+        .nav-dropdown-heading span {
+          display: none;
+        }
+        .nav-link-grid {
+          grid-template-columns: 1fr;
+          gap: 0.38rem;
+        }
+        .lesson-nav .nav-link-grid a {
+          min-height: 48px;
+          padding: 0.82rem 0.95rem;
+          background: var(--bg);
+          border: 1px solid var(--bd);
+          border-radius: 12px;
+          font-size: 0.97rem;
+        }
+        .lesson-nav .nav-link-grid a.active {
+          background: color-mix(in srgb, var(--ac) 12%, var(--card));
+        }
+        html.lesson-menu-open,
+        body.lesson-menu-open {
+          overflow: hidden;
+          overscroll-behavior: none;
+        }
+      }
+      @media (max-width: 390px) {
+        .brand-label {
+          max-width: 26vw;
+          font-size: 0.78rem;
+        }
+        .lesson-nav .nav-cheat {
+          padding: 0.52rem 0.62rem;
+        }
+        .nav-menu-button {
+          padding: 0.5rem 0.65rem;
+        }
+      }
+      .nav-dropdown-heading span {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <header class="hero">
+      <div class="wrap">
+        <button class="themebtn" id="theme" type="button">🌓 Тема</button>
+        <h1>Адаптивна верстка 📱💻🖥️</h1>
+        <p>
+          Як зробити так, щоб один сайт гарно виглядав і на телефоні, і на
+          ноутбуці, і на великому моніторі. Читай, крути повзунок і перевіряй
+          себе в тесті!
+        </p>
+      </div>
+    </header>
+    <div class="nav-backdrop" id="lessonMenuBackdrop" hidden></div>
+    <nav class="lesson-nav" aria-label="Навігація уроком">
+      <div class="wrap nav-inner">
+        <a class="nav-brand" href="#what" aria-label="До початку уроку"
+          ><span class="brand-symbol">{ }</span
+          ><span class="brand-label">Адаптивна верстка</span></a
+        >
+        <span class="nav-location" id="navLocation" aria-live="off"
+          >01 / 14 · Що це</span
+        >
+        <div class="nav-actions">
+          <a class="nav-cheat" href="#cheat">📄 <span>Шпаргалка</span></a>
+          <button
+            class="nav-menu-button"
+            id="lessonMenuButton"
+            type="button"
+            aria-expanded="false"
+            aria-controls="lessonMenu"
+          >
+            ☰ <span>Розділи</span
+            ><span class="menu-arrow" aria-hidden="true">⌄</span>
+          </button>
+        </div>
+      </div>
+      <div class="nav-dropdown" id="lessonMenu" hidden>
+        <div class="wrap">
+          <div class="nav-dropdown-heading">
+            <strong>Зміст уроку</strong><span>Швидкий перехід до теми</span>
+          </div>
+          <div class="nav-link-grid">
+            <a href="#what" data-section-link="what"
+              ><span class="nav-number">01</span><span>Що це</span></a
+            ><a href="#viewport" data-section-link="viewport"
+              ><span class="nav-number">02</span><span>Viewport</span></a
+            ><a href="#principles" data-section-link="principles"
+              ><span class="nav-number">03</span><span>Два принципи</span></a
+            ><a href="#history" data-section-link="history"
+              ><span class="nav-number">04</span><span>Історія</span></a
+            ><a href="#mq" data-section-link="mq"
+              ><span class="nav-number">05</span><span>Медіа-запити</span></a
+            ><a href="#types" data-section-link="types"
+              ><span class="nav-number">06</span><span>Медіа-типи</span></a
+            ><a href="#features" data-section-link="features"
+              ><span class="nav-number">07</span><span>Функції</span></a
+            ><a href="#operators" data-section-link="operators"
+              ><span class="nav-number">08</span><span>Оператори</span></a
+            ><a href="#breakpoint" data-section-link="breakpoint"
+              ><span class="nav-number">09</span><span>Брейкпойнт</span></a
+            ><a href="#lab" data-section-link="lab"
+              ><span class="nav-number">10</span><span>Лабораторія</span></a
+            ><a href="#flex" data-section-link="flex"
+              ><span class="nav-number">11</span><span>Flexbox</span></a
+            ><a href="#modern" data-section-link="modern"
+              ><span class="nav-number">12</span><span>Підхід 2026</span></a
+            ><a href="#quiz" data-section-link="quiz"
+              ><span class="nav-number">13</span><span>Тест</span></a
+            ><a href="#cheat" data-section-link="cheat"
+              ><span class="nav-number">14</span><span>Шпаргалка</span></a
+            >
+          </div>
+        </div>
+      </div>
+    </nav>
+    <main class="wrap">
+      <section id="what">
+        <h2>1. Що таке адаптивна верстка?</h2>
+        <div class="card">
+          <p>
+            <b>Адаптивна верстка</b> — це верстка, після якої сайт на різних
+            моніторах відображається гарно, зручно для читання і не потребує
+            масштабування, а також немає необхідності в горизонтальному
+            скролінгу.
+          </p>
+          <p>
+            <b>Адаптивна верстка і дизайн</b> — це перелік технік і концепцій
+            верстки, розробки та дизайну сайтів, що забезпечують відмінне
+            відображення на різних пристроях.
+          </p>
+        </div>
+        <div class="analogy">
+          <b>💧 Аналогія:</b> вода приймає форму склянки, чашки чи пляшки — вона
+          не «ламається», а підлаштовується. Хороший сайт працює так само: той
+          самий контент, але різна «форма» залежно від екрана.
+        </div>
+        <div class="grid">
+          <div class="card">
+            <h3>✅ Хороший адаптив</h3>
+            <p>
+              Текст читається без збільшення пальцями, кнопки зручно натискати,
+              нічого не «вилазить» за край екрана.
+            </p>
+          </div>
+          <div class="card">
+            <h3>❌ Поганий адаптив</h3>
+            <p>
+              Треба зумити, щоб прочитати, або гортати сторінку вбік. Користувач
+              просто закриє сайт.
+            </p>
+          </div>
+        </div>
+        <p class="exp">
+          Базове правило: у <code>&lt;head&gt;</code> завжди має бути
+          <code
+            >&lt;meta name="viewport" content="width=device-width,
+            initial-scale=1"&gt;</code
+          >. Без нього телефон вдає, що екран великий, і зменшує сайт.
+        </p>
+      </section>
+
+      <section id="viewport">
+        <h2>2. Viewport — область, яку бачить користувач</h2>
+        <p>
+          Адаптивна верстка працює з <b>viewport</b> (в’юпорт) — це область, яку
+          бачить користувач на екрані, коли заходить на сторінку сайту з
+          будь-якого пристрою. Це не весь екран телефона і не вся довжина
+          сторінки, а «віконце», крізь яке ми дивимось на сайт.
+        </p>
+        <div class="analogy">
+          <b>📸 Аналогія:</b> уяви величезний мурал на стіні й рамку
+          фотоапарата. Мурал — це сторінка, а те, що влізло в кадр, — viewport.
+          Повернув телефон або змінив розмір вікна — рамка змінилась, і вміст
+          треба переставити під неї.
+        </div>
+        <div class="card">
+          <b>🔍 Твій viewport зараз:</b> <span class="badge" id="vp">…</span>
+          <p class="exp">
+            Потягни край вікна браузера або поверни телефон — число зміниться.
+            Саме це число перевіряють медіа-запити <code>min-width</code> і
+            <code>max-width</code>.
+          </p>
+        </div>
+        <h3>Що змінює розмір viewport</h3>
+        <ul>
+          <li>зміна розміру вікна браузера на комп’ютері;</li>
+          <li>поворот телефона (портрет ↔ ландшафт);</li>
+          <li>адресний рядок, що ховається під час гортання;</li>
+          <li>екранна клавіатура.</li>
+        </ul>
+        <h3>Метатег viewport</h3>
+        <p>
+          Мобільні браузери за замовчуванням вдають, що екран завширшки близько
+          <b>980px</b>, а потім зменшують сторінку, щоб вона влізла. Тому без
+          спеціального тега текст крихітний, а медіа-запити для телефона не
+          спрацьовують (браузер вважає, що екран широкий). Тег у
+          <code>&lt;head&gt;</code> каже: «використовуй справжню ширину
+          пристрою».
+        </p>
+        <pre><code>&lt;meta name="viewport" content="width=device-width, initial-scale=1"&gt;</code></pre>
+        <div class="lab card">
+          <div class="ctrl">
+            <button class="tab" id="vno" aria-selected="true" type="button">
+              ❌ Без метатега
+            </button>
+            <button class="tab" id="vyes" aria-selected="false" type="button">
+              ✅ З метатегом
+            </button>
+          </div>
+          <p id="vtxt" class="exp"></p>
+          <div class="stage">
+            <div
+              id="vbox"
+              style="
+                width: 360px;
+                height: 300px;
+                overflow: hidden;
+                border: 3px solid var(--ac);
+                border-radius: 0.8rem;
+                background: #fff;
+                margin-inline: auto;
+              "
+            >
+              <iframe
+                id="vpf"
+                title="Демо viewport"
+                style="
+                  border: 0;
+                  border-radius: 0;
+                  max-width: none;
+                  transform-origin: top left;
+                "
+              ></iframe>
+            </div>
+          </div>
+        </div>
+        <h3>Розбираємо атрибути</h3>
+        <div class="tablewrap card">
+          <table>
+            <tr>
+              <th>Атрибут</th>
+              <th>Що означає</th>
+            </tr>
+            <tr>
+              <td><code>name="viewport"</code></td>
+              <td>Це інструкція саме для налаштувань області перегляду.</td>
+            </tr>
+            <tr>
+              <td><code>width=device-width</code></td>
+              <td>
+                Ширина viewport дорівнює ширині екрана пристрою (у CSS-пікселях,
+                а не фізичних).
+              </td>
+            </tr>
+            <tr>
+              <td><code>initial-scale=1</code></td>
+              <td>
+                Початковий масштаб 100%: сторінка не збільшена й не зменшена.
+              </td>
+            </tr>
+            <tr>
+              <td><code>minimum-scale</code>, <code>maximum-scale</code></td>
+              <td>Межі масштабування пальцями. Краще не обмежувати.</td>
+            </tr>
+            <tr>
+              <td><code>user-scalable=no</code></td>
+              <td>
+                Забороняє зум. <b>Не використовуй</b>: людям зі слабким зором
+                потрібне збільшення (вимоги доступності WCAG).
+              </td>
+            </tr>
+            <tr>
+              <td><code>viewport-fit=cover</code></td>
+              <td>
+                Сторінка займає весь екран телефона, навіть під вирізом. Разом
+                із <code>env(safe-area-inset-top)</code> тримаємо вміст у
+                безпечній зоні.
+              </td>
+            </tr>
+          </table>
+        </div>
+        <div class="analogy">
+          <b>📏 Аналогія:</b> CSS-піксель — як «сантиметр на лінійці браузера».
+          Екран iPhone має понад 1000 фізичних точок завширшки, але для верстки
+          це приблизно 390 CSS-пікселів. Саме їх показує
+          <code>device-width</code>, тому на різних телефонах верстка поводиться
+          схоже.
+        </div>
+        <h3>Одиниці, що залежать від viewport</h3>
+        <div class="tablewrap card">
+          <table>
+            <tr>
+              <th>Одиниця</th>
+              <th>Значення</th>
+            </tr>
+            <tr>
+              <td><code>vw</code> / <code>vh</code></td>
+              <td>1% ширини / висоти viewport</td>
+            </tr>
+            <tr>
+              <td><code>dvh</code></td>
+              <td>
+                динамічна висота: враховує адресний рядок, що ховається
+                (найкраще для «на весь екран» на телефоні)
+              </td>
+            </tr>
+            <tr>
+              <td><code>svh</code> / <code>lvh</code></td>
+              <td>найменша / найбільша висота viewport</td>
+            </tr>
+          </table>
+        </div>
+        <p class="exp">
+          ⚠️ Типова помилка: <code>width: 100vw</code> враховує смугу
+          прокручування, і на комп’ютері з’являється горизонтальний скрол.
+          Надійніше писати <code>width: 100%</code>.
+        </p>
+        <h3>Контрольний список</h3>
+        <ul>
+          <li>метатег viewport є в кожній HTML-сторінці;</li>
+          <li>не забороняємо зум;</li>
+          <li>
+            не задаємо блокам фіксовану ширину в <code>px</code> більшу за екран
+            телефона;
+          </li>
+          <li>
+            перевіряємо сайт у режимі пристроїв у DevTools (F12 → іконка
+            телефона).
+          </li>
+        </ul>
+      </section>
+
+      <section id="principles">
+        <h2>3. Два головні принципи</h2>
+        <div class="tabs" role="tablist">
+          <button
+            class="tab"
+            role="tab"
+            aria-selected="true"
+            data-p="mf"
+            type="button"
+          >
+            📱 Mobile First
+          </button>
+          <button
+            class="tab"
+            role="tab"
+            aria-selected="false"
+            data-p="df"
+            type="button"
+          >
+            🖥️ Desktop First
+          </button>
+        </div>
+        <div class="pane card" id="mf">
+          <p>
+            <b>Mobile First</b> — спочатку продумується, малюється і верстається
+            мобільна версія сайту, а потім нарощується функціонал для більших
+            екранів.
+          </p>
+          <div class="analogy">
+            <b>🎒 Аналогія:</b> ти пакуєш рюкзак на день: спершу найнеобхідніше,
+            а для довгої подорожі докладаєш речі.
+          </div>
+          <pre><code>/* базові стилі = для телефона */
+.cards { display: flex; flex-direction: column; gap: 1rem; }
+
+/* від 768px картки стають в один ряд */
+@media (min-width: 768px) {
+  .cards { flex-direction: row; }
+}</code></pre>
+          <p>
+            Використовуємо <code>min-width</code>. Це стандарт індустрії:
+            більшість відвідувачів зараз із телефонів.
+          </p>
+        </div>
+        <div class="pane card" id="df" hidden>
+          <p>
+            <b>Desktop First</b> — спочатку верстається десктопна версія, а
+            потім прибирається все зайве, залишається мобільна версія.
+          </p>
+          <div class="analogy">
+            <b>🧳 Аналогія:</b> ти зібрав велику валізу, а потім із неї вибираєш
+            лише те, що влізе в рюкзак.
+          </div>
+          <pre><code>/* базові стилі = для компʼютера */
+.cards { display: flex; flex-direction: row; gap: 1rem; }
+
+/* до 768px картки стають в один стовпчик */
+@media (max-width: 768px) {
+  .cards { flex-direction: column; }
+}</code></pre>
+          <p>
+            Використовуємо <code>max-width</code>. Працює, але на слабких
+            телефонах завантажується зайве, тому сьогодні частіше обирають
+            Mobile First.
+          </p>
+        </div>
+        <div
+          class="card"
+          style="border-left: 6px solid var(--ac); margin-top: 1rem"
+        >
+          <h3>📌 Запам’ятай</h3>
+          <p>
+            У Mobile First
+            <b
+              >базові стилі, написані без медіазапитів, — це стилі для
+              мобільного</b
+            >. Окремий <code>@media</code> для телефона писати не треба.
+            Медіазапити пишемо для більших екранів: планшета та комп’ютера, за
+            допомогою <code>min-width</code>.
+          </p>
+          <pre><code>/* телефон: без медіазапиту */
+.menu { display: flex; flex-direction: column; }
+
+/* планшет */
+@media (min-width: 768px) {
+  .menu { flex-direction: row; }
+}
+
+/* комп'ютер */
+@media (min-width: 1024px) {
+  .menu { justify-content: space-between; }
+}</code></pre>
+          <ul>
+            <li>
+              Точніше казати не «для планшета», а «для екранів від такої-то
+              ширини»: ми пишемо під брейкпойнти, а не під моделі пристроїв.
+            </li>
+            <li>
+              Медіазапити потрібні не лише для розміру екрана:
+              <code>prefers-color-scheme</code> (темна тема),
+              <code>prefers-reduced-motion</code> (менше анімацій),
+              <code>print</code> (друк), <code>hover</code> (чи є миша).
+            </li>
+            <li>
+              Щоб базові стилі справді працювали як мобільні, у
+              <code>&lt;head&gt;</code> має бути метатег viewport.
+            </li>
+            <li>
+              Базові стилі мають бути гнучкими: <code>%</code>,
+              <code>rem</code>, <code>flex</code>, <code>max-width: 100%</code>.
+              Фіксована ширина в <code>px</code> на телефоні дасть
+              горизонтальний скрол.
+            </li>
+          </ul>
+          <p class="exp">
+            <b>Коротко:</b> Mobile First = базові стилі для телефона +
+            <code>@media (min-width: …)</code> для великих екранів. Desktop
+            First навпаки: базові стилі для комп’ютера +
+            <code>@media (max-width: …)</code>, щоб прибрати зайве на телефоні.
+          </p>
+        </div>
+      </section>
+
+      <section id="history">
+        <h2>4. Коротка історія медіа-запитів</h2>
+        <ul class="tl card">
+          <li>
+            <b>1994</b> — Хокон Віум Лі (Håkon Wium Lie) у первісній пропозиції
+            CSS згадує ідею медіа-запитів, але до CSS1 вона не потрапила.
+          </li>
+          <li>
+            <b>1997</b> — рекомендація HTML4 показує приклад того, як ці
+            можливості можуть з’явитися в майбутньому.
+          </li>
+          <li><b>2000</b> — W3C починає роботу над Media Queries.</li>
+          <li><b>2001</b> — перший публічний робочий проєкт медіа-запитів.</li>
+          <li>
+            <b>2012</b> — специфікація стає рекомендацією W3C після того, як
+            браузери додали підтримку.
+          </li>
+        </ul>
+      </section>
+
+      <section id="mq">
+        <h2>5. Медіа-запити: з чого вони складаються</h2>
+        <p>
+          Медіа-запити роблять можливими сучасні адаптивні сторінки, які
+          однаково добре виглядають і на десктопі, і на смартфоні. Все зводиться
+          до застосування того чи іншого CSS-правила залежно від розміру вікна
+          браузера (в’юпорту), налаштувань браузера або можливостей пристрою.
+        </p>
+        <div class="analogy">
+          <b>🚦 Аналогія:</b> медіа-запит — це «якщо… то…». Якщо екран ширший за
+          900px — зроби фон зеленим, інакше — залишай як є. Як світлофор: умова
+          виконалась і правило спрацювало.
+        </div>
+        <h3>Алгоритм роботи</h3>
+        <div class="grid">
+          <div class="card">
+            <b>1.</b> Розробник описує медіа-запити та CSS-правила всередині
+            них.
+          </div>
+          <div class="card">
+            <b>2.</b> Браузер стежить за зміною розміру в’юпорту.
+          </div>
+          <div class="card">
+            <b>3.</b> Браузер застосовує правила тих запитів, які відповідають
+            поточному розміру.
+          </div>
+        </div>
+        <p>
+          Простими словами: «коли сторінку відкрили на десктопі — колір тексту
+          червоний, а на телефоні — зелений».
+        </p>
+        <h3>Що таке директива?</h3>
+        <div class="card">
+          <p>
+            <b>Директива</b> (в CSS її ще називають <b>@-правилом</b>,
+            англійською <i>at-rule</i>) — це спеціальна інструкція для браузера.
+            Вона завжди починається із символу <code>@</code> і пояснює,
+            <i>як</i> обробити блок коду, що йде після неї. Звичайні CSS-правила
+            кажуть «зроби цей елемент червоним», а директива — «ось особливі
+            умови або налаштування для цього блоку».
+          </p>
+          <div class="tablewrap">
+            <table>
+              <tr>
+                <th>Директива</th>
+                <th>Для чого</th>
+              </tr>
+              <tr>
+                <td><code>@media</code></td>
+                <td>
+                  застосувати стилі лише за певних умов (розмір екрана, друк…)
+                </td>
+              </tr>
+              <tr>
+                <td><code>@import</code></td>
+                <td>підключити інший файл стилів</td>
+              </tr>
+              <tr>
+                <td><code>@font-face</code></td>
+                <td>підключити власний шрифт</td>
+              </tr>
+              <tr>
+                <td><code>@keyframes</code></td>
+                <td>описати кроки анімації</td>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <div class="analogy">
+          <b>📣 Аналогія:</b> уяви шкільне оголошення. Звичайне правило — «Усі
+          сидять тихо». Директива — це заголовок «УВАГА! Під час контрольної:»,
+          після якого йдуть правила, які діють <i>тільки</i> тоді.
+          <code>@media</code> теж каже: «Увага! Лише коли екран такий-то:» — і
+          далі в фігурних дужках йдуть стилі.
+        </div>
+        <h3>Будова медіа-запиту</h3>
+        <pre><code>@media media-type and (media-feature) {
+  /* CSS-правила, які застосуються, якщо
+     тип пристрою і умова виконуються */
+}</code></pre>
+        <p>
+          <b>Медіа-запит</b> оголошується директивою <code>@media</code>, за
+          якою може йти тип пристрою (<code>media-type</code>) і медіа-функції
+          (<code>media-feature</code>) — вирази, що перевіряють характеристики
+          пристрою, наприклад ширину в’юпорту. Медіа-функція — це логічний
+          вираз, який повертає істину або хибність.
+        </p>
+        <div class="grid">
+          <div class="card">
+            <b>🖨️ media-type</b><br />НА ЯКОМУ пристрої? (екран, принтер…)
+          </div>
+          <div class="card">
+            <b>📏 media-feature</b><br />З ЯКИМИ характеристиками? (ширина,
+            орієнтація…)
+          </div>
+          <div class="card">
+            <b>🔗 Оператори</b><br />Як ПОЄДНАТИ умови? (and, not, only, кома)
+          </div>
+        </div>
+        <p class="exp">
+          Розбираємо по черзі: спочатку <b>типи</b>, потім <b>функції</b>, і
+          наприкінці <b>оператори</b>, які поєднують усе разом.
+        </p>
+      </section>
+
+      <section id="types">
+        <h2>6. Медіа-типи (media-type)</h2>
+        <p>
+          Медіа-тип відповідає на питання «<i>на якому пристрої</i> показують
+          сторінку?». Він пишеться одразу після <code>@media</code>.
+        </p>
+        <div class="tablewrap card">
+          <table>
+            <tr>
+              <th>Тип</th>
+              <th>Опис</th>
+            </tr>
+            <tr>
+              <td><code>all</code></td>
+              <td>Усі типи. Це значення використовується за замовчуванням.</td>
+            </tr>
+            <tr>
+              <td><code>print</code></td>
+              <td>Друкуючі пристрої на кшталт принтера.</td>
+            </tr>
+            <tr>
+              <td><code>screen</code></td>
+              <td>Екран пристрою.</td>
+            </tr>
+            <tr>
+              <td><code>speech</code></td>
+              <td>
+                Мовні синтезатори, а також програми для відтворення тексту
+                вголос. Сюди, наприклад, можна віднести мовні браузери.
+              </td>
+            </tr>
+          </table>
+        </div>
+        <div class="analogy">
+          <b>🎭 Аналогія:</b> один і той самий сценарій можна показати в
+          кінотеатрі (<code>screen</code>), роздрукувати на папері
+          (<code>print</code>) або озвучити як аудіокнигу (<code>speech</code>).
+          Зміст той самий, а «подача» різна.
+        </div>
+        <h3>Приклад: сторінка для друку</h3>
+        <pre><code>/* на екрані: меню і реклама видно */
+nav, .ads { display: block; }
+
+/* при друку: прибираємо зайве, економимо чорнило */
+@media print {
+  nav, .ads { display: none; }
+  body { background: white; color: black; }
+}
+
+/* для програм озвучення (підтримка обмежена) */
+@media speech {
+  .decor { speak: none; }
+}</code></pre>
+        <p class="exp">
+          Спробуй: натисни Ctrl+P на цій сторінці — у попередньому перегляді
+          буде видно лише шпаргалку з розділу 14, а решту сторінки сховано
+          директивою <code>@media print</code>. Це і є стилі для
+          <code>print</code> у дії. Якщо тип не вказати, діє <code>all</code>.
+          Тому <code>@media (min-width: 900px)</code> — це те саме, що
+          <code>@media all and (min-width: 900px)</code>. А от
+          <code>print</code> корисний для чеків, квитків і конспектів.
+        </p>
+      </section>
+
+      <section id="features">
+        <h2>7. Медіа-функції (media-feature)</h2>
+        <p>
+          Тип каже, <i>де</i> показують сторінку. Медіа-функція перевіряє,
+          <i>який саме</i> цей пристрій. Їх велика кількість, повний список є на
+          <a
+            href="https://developer.mozilla.org/uk/docs/Web/CSS/@media#media_features"
+            target="_blank"
+            rel="noopener"
+            style="color: var(--ac)"
+            >MDN</a
+          >. Основні функції, що найчастіше використовуються і дозволяють
+          визначати ширину в’юпорту браузера, — <code>min-width</code> і
+          <code>max-width</code>. Вказується мінімальна (<code>min-width</code>)
+          або максимальна (<code>max-width</code>) допустима ширина в’юпорту, за
+          якої застосовуються правила з медіа-запитів.
+        </p>
+        <pre><code>/* Застосується, коли ширина в'юпорту менша за 600px (до 600px включно) */
+@media (max-width: 600px) {
+  body { background-color: yellow; }
+}
+
+/* Застосується, коли ширина в'юпорту 900px і більша */
+@media (min-width: 900px) {
+  body { background-color: green; }
+}</code></pre>
+        <div class="analogy">
+          <b>🎢 Аналогія:</b> <code>min-width</code> — «мінімальний зріст для
+          атракціону» (від цієї межі й вище), <code>max-width</code> — «до цієї
+          межі включно».
+        </div>
+        <div class="tablewrap card">
+          <table>
+            <tr>
+              <th>Функція</th>
+              <th>Перевіряє</th>
+              <th>Приклад</th>
+            </tr>
+            <tr>
+              <td><code>min-width</code>, <code>max-width</code></td>
+              <td>ширину в’юпорту</td>
+              <td><code>(min-width: 768px)</code></td>
+            </tr>
+            <tr>
+              <td><code>orientation</code></td>
+              <td>
+                орієнтацію: <code>portrait</code> (вертикально) чи
+                <code>landscape</code> (горизонтально)
+              </td>
+              <td><code>(orientation: landscape)</code></td>
+            </tr>
+            <tr>
+              <td><code>prefers-color-scheme</code></td>
+              <td>темну чи світлу тему користувача</td>
+              <td><code>(prefers-color-scheme: dark)</code></td>
+            </tr>
+            <tr>
+              <td><code>prefers-reduced-motion</code></td>
+              <td>чи просить користувач менше анімацій</td>
+              <td><code>(prefers-reduced-motion: reduce)</code></td>
+            </tr>
+            <tr>
+              <td><code>hover</code></td>
+              <td>чи вміє пристрій наводити курсор (миша є, палець ні)</td>
+              <td><code>(hover: hover)</code></td>
+            </tr>
+          </table>
+        </div>
+      </section>
+
+      <section id="operators">
+        <h2>8. Логічні оператори</h2>
+        <p>
+          Тепер, коли ми знаємо типи та функції, їх можна поєднувати. Медіа-тип
+          і медіа-функції можуть бути розділені необов’язковими логічними
+          операторами <code>not</code>, <code>and</code> і <code>only</code>.
+          Повний синтаксис:
+        </p>
+        <pre><code>@media only|not media-type and (media-feature) {
+  /* CSS-правила */
+}</code></pre>
+        <div class="tablewrap card">
+          <table>
+            <tr>
+              <th>Оператор</th>
+              <th>Що робить</th>
+              <th>Приклад</th>
+            </tr>
+            <tr>
+              <td><code>and</code></td>
+              <td>«І»: усі умови одночасно</td>
+              <td><code>screen and (min-width: 600px)</code></td>
+            </tr>
+            <tr>
+              <td><code>not</code></td>
+              <td>Заперечення всього запиту</td>
+              <td><code>not print</code></td>
+            </tr>
+            <tr>
+              <td><code>only</code></td>
+              <td>
+                Приховує запит від дуже старих браузерів. Сучасні браузери
+                працюють так само і без нього
+              </td>
+              <td><code>only screen and (min-width: 600px)</code></td>
+            </tr>
+            <tr>
+              <td>кома <code>,</code></td>
+              <td>«Або»: спрацює будь-яка умова</td>
+              <td><code>(max-width: 500px), (orientation: portrait)</code></td>
+            </tr>
+          </table>
+        </div>
+        <div class="analogy">
+          <b>🎟️ Аналогія:</b> вхід на концерт. <code>and</code> — «потрібен
+          квиток І паспорт». Кома — «потрібен квиток АБО запрошення».
+          <code>not</code> — «усім, крім учасників».
+        </div>
+        <pre><code>/* екран І ширина від 600 до 900px */
+@media screen and (min-width: 600px) and (max-width: 900px) {
+  .menu { flex-direction: row; }
+}
+
+/* вузький екран АБО вертикальна орієнтація */
+@media (max-width: 500px), (orientation: portrait) {
+  .sidebar { display: none; }
+}
+
+/* усе, крім друку */
+@media not print {
+  body { background: #f6f7fb; }
+}</code></pre>
+        <p class="exp">
+          У сучасних браузерах діапазон можна записати коротше:
+          <code>@media (600px &lt;= width &lt;= 900px)</code>, про це ще буде в
+          розділі «Як це роблять у 2026 році».
+        </p>
+      </section>
+
+      <section id="breakpoint">
+        <h2>9. Брейкпойнт (breakpoint)</h2>
+        <p>
+          <b>Брейкпойнт</b> (англ. <i>breakpoint</i>, «точка зламу») — це
+          значення ширини в’юпорту, при якому макет сайту змінюється: спрацьовує
+          медіа-запит і браузер застосовує інші стилі. Тобто це та сама цифра,
+          яку ми пишемо в дужках: <code>600px</code> у
+          <code>@media (min-width: 600px)</code> і є брейкпойнтом.
+        </p>
+        <div class="analogy">
+          <b>🌡️ Аналогія:</b> вода при 99°C ще рідина, а при 100°C вже закипає.
+          Число 100 — це «точка зламу», де змінюється стан. Так само сайт на
+          599px ще «мобільний», а на 600px уже перебудовується.
+        </div>
+        <pre><code>.menu { display: flex; flex-direction: column; }   /* до 768px: стовпчик */
+
+/* 768px — це брейкпойнт */
+@media (min-width: 768px) {
+  .menu { flex-direction: row; }                    /* від 768px: у рядок */
+}</code></pre>
+        <h3>Типові брейкпойнти</h3>
+        <div class="tablewrap card">
+          <table>
+            <tr>
+              <th>Ширина</th>
+              <th>Пристрій (орієнтир)</th>
+            </tr>
+            <tr>
+              <td>до ~600px</td>
+              <td>📱 телефон</td>
+            </tr>
+            <tr>
+              <td>від ~600px</td>
+              <td>📱 великий телефон, телефон горизонтально</td>
+            </tr>
+            <tr>
+              <td>від ~768px</td>
+              <td>📋 планшет</td>
+            </tr>
+            <tr>
+              <td>від ~1024px</td>
+              <td>💻 ноутбук</td>
+            </tr>
+            <tr>
+              <td>від ~1440px</td>
+              <td>🖥️ великий монітор</td>
+            </tr>
+          </table>
+        </div>
+        <h3>Як вибрати брейкпойнт</h3>
+        <div class="grid">
+          <div class="card">
+            <b>❌ Не так</b><br />«Зроблю під конкретний телефон». Моделей
+            тисячі, і щороку з’являються нові.
+          </div>
+          <div class="card">
+            <b>✅ Так</b><br />Повільно розтягуй вікно браузера. Щойно макет
+            став некрасивим (текст розтягнувся, блоки далеко), саме тут і
+            ставимо брейкпойнт.
+          </div>
+        </div>
+        <div class="analogy">
+          <b>👕 Порада:</b> не вигадуй багато брейкпойнтів. Для простого сайту
+          зазвичай вистачає двох-трьох. Для Mobile First пиши тільки
+          <code>min-width</code>, щоб діапазони не перекривалися. Спробуй у
+          лабораторії нижче: там брейкпойнти <b>600px</b> і <b>900px</b>.
+        </div>
+      </section>
+
+      <section id="lab">
+        <h2>10. 🧪 Лабораторія: повзунок ширини екрана</h2>
+        <p>
+          Це справжня сторінка з медіа-запитами в рамці. Рухай повзунок і
+          дивись, як вона перебудовується. Або тисни кнопку пристрою.
+        </p>
+        <div class="lab card">
+          <div class="ctrl">
+            <input
+              type="range"
+              id="w"
+              min="280"
+              max="1100"
+              value="360"
+              aria-label="Ширина екрана"
+            />
+            <span class="badge" id="wl">360px</span>
+          </div>
+          <div class="ctrl">
+            <button class="tab" data-w="360" type="button">
+              📱 Телефон 360
+            </button>
+            <button class="tab" data-w="768" type="button">
+              📋 Планшет 768
+            </button>
+            <button class="tab" data-w="1100" type="button">
+              🖥️ Десктоп 1100
+            </button>
+          </div>
+          <p id="state" class="exp"></p>
+          <div class="stage">
+            <iframe
+              id="fr"
+              title="Демо адаптивної сторінки"
+              style="width: 360px"
+            ></iframe>
+          </div>
+          <pre><code>.row  { display: flex; flex-wrap: wrap; gap: 8px; }
+.item { flex: 1 1 100%; }                                   /* 1 колонка */
+@media (min-width: 600px) { .item { flex-basis: calc(50% - 8px); } }      /* 2 колонки */
+@media (min-width: 900px) { .item { flex-basis: calc(33.333% - 8px); } } /* 3 колонки */</code></pre>
+        </div>
+      </section>
+
+      <section id="flex">
+        <h2>11. 🧩 Flexbox + адаптив</h2>
+        <p>
+          Flexbox розкладає блоки в рядок або стовпчик. Разом із медіа-запитами
+          це найпростіший спосіб зробити меню й картки адаптивними.
+        </p>
+        <div class="analogy">
+          <b>🚌 Аналогія:</b> flex-контейнер — це автобус, а блоки — пасажири.
+          На вузькій вулиці (телефон) усі стоять в один ряд по вертикалі, а на
+          широкій дорозі (десктоп) сідають поруч.
+        </div>
+        <h3>Приклад 1: меню змінює напрямок</h3>
+        <pre><code>.menu { display: flex; flex-direction: column; gap: 8px; }  /* телефон */
+
+@media (min-width: 600px) {
+  .menu { flex-direction: row; justify-content: space-between; }
+}</code></pre>
+        <h3>Приклад 2: картки самі переносяться</h3>
+        <pre><code>.cards { display: flex; flex-wrap: wrap; gap: 12px; }
+.card  { flex: 1 1 200px; }  /* росте, стискається, мінімум ~200px */</code></pre>
+        <p>
+          <code>flex: 1 1 200px</code> означає: «зайняти вільне місце, за
+          потреби стиснутись, але бажано не менше 200px». Коли місця мало —
+          картка переходить на новий рядок.
+        </p>
+        <h3>Приклад 3: сторінка з бічною панеллю</h3>
+        <pre><code>.layout { display: flex; flex-direction: column; }      /* телефон: все в стовпчик */
+.side { flex: 0 0 200px; }
+.main { flex: 1; }
+
+@media (min-width: 900px) {
+  .layout { flex-direction: row; }                      /* десктоп: панель збоку */
+}</code></pre>
+        <div class="lab card">
+          <div class="ctrl">
+            <input
+              type="range"
+              id="w2"
+              min="280"
+              max="1100"
+              value="360"
+              aria-label="Ширина екрана для flexbox"
+            />
+            <span class="badge" id="wl2">360px</span>
+          </div>
+          <div class="stage">
+            <iframe id="fr2" title="Демо flexbox" style="width: 360px"></iframe>
+          </div>
+          <p class="exp">
+            Дивись: меню міняє напрямок на 600px, бічна панель стає збоку на
+            900px, а картки переносяться самі.
+          </p>
+        </div>
+      </section>
+
+      <section id="modern">
+        <h2>12. Як це роблять у 2026 році</h2>
+        <p>
+          Медіа-запити — основа, але сучасна верстка поєднує кілька
+          інструментів. Менше «жорстких» брейкпойнтів, більше гнучкості.
+        </p>
+        <div class="grid">
+          <div class="card">
+            <h3>📏 Відносні одиниці</h3>
+            <p>
+              Використовуй <code>rem</code>, <code>%</code>, <code>fr</code>, а
+              не лише <code>px</code>. Для висоти екрана на телефонах —
+              <code>dvh</code>, бо вона враховує рядок адреси браузера.
+            </p>
+          </div>
+          <div class="card">
+            <h3>🪄 clamp()</h3>
+            <p>
+              Розмір, що плавно росте між мінімумом і максимумом без жодного
+              медіа-запиту:<br /><code
+                >font-size: clamp(1rem, 2.5vw, 2rem)</code
+              >
+            </p>
+          </div>
+          <div class="card">
+            <h3>🧱 Flexbox</h3>
+            <p>
+              Блоки самі переносяться: <code>flex-wrap: wrap</code> і
+              <code>flex: 1 1 15rem</code> — і колонки підлаштуються самі, без
+              жодного медіа-запиту. (CSS Grid ви вивчите пізніше, він для
+              складніших макетів.)
+            </p>
+          </div>
+          <div class="card">
+            <h3>📦 Container Queries</h3>
+            <p>
+              Компонент реагує на розмір свого контейнера, а не всього екрана:
+              <code>@container (min-width: 400px)</code>. Підтримується всіма
+              сучасними браузерами.
+            </p>
+          </div>
+          <div class="card">
+            <h3>🖼️ Адаптивні картинки</h3>
+            <p>
+              <code>max-width: 100%</code>, а також <code>srcset</code> і
+              <code>&lt;picture&gt;</code>: телефон не мусить качати величезне
+              фото.
+            </p>
+          </div>
+          <div class="card">
+            <h3>🌗 Налаштування користувача</h3>
+            <p>
+              <code>prefers-color-scheme: dark</code> (темна тема) і
+              <code>prefers-reduced-motion</code> (менше анімацій) — теж
+              медіа-запити. Спробуй кнопку «Тема» вгорі!
+            </p>
+          </div>
+        </div>
+        <h3>Сучасний синтаксис діапазонів</h3>
+        <pre><code>/* замість (min-width: 600px) and (max-width: 900px) */
+@media (600px &lt;= width &lt;= 900px) { ... }</code></pre>
+        <p>
+          Про брейкпойнти (де саме ставити «точки зламу») читай у розділі 9.
+        </p>
+        <div class="analogy">
+          <b>👕 Аналогія:</b> одяг бувають S, M, L (брейкпойнти), а гумка в
+          поясі (<code>clamp</code>, <code>fr</code>) підлаштовується плавно.
+          Найкраще працюють обидва варіанти разом.
+        </div>
+      </section>
+
+      <section id="quiz">
+        <h2>13. ✅ Перевір себе</h2>
+        <div class="card" id="qbox"></div>
+        <p class="score" id="score"></p>
+      </section>
+
+      <section id="cheat">
+        <h2>14. 📄 Шпаргалка</h2>
+        <p class="noprint">
+          Основні терміни та синтаксис на одній сторінці. Натисніть кнопку або
+          Ctrl+P: надрукується лише ця шпаргалка.
+        </p>
+        <button class="tab noprint" type="button" onclick="window.print()">
+          🖨️ Роздрукувати
+        </button>
+        <div class="grid" style="margin-top: 1rem">
+          <div class="card">
+            <h3>📚 Основні терміни</h3>
+            <ul>
+              <li>
+                <b>Адаптивна верстка</b> — верстка, за якої сайт на різних
+                моніторах відображається коректно та зручно для читання, не
+                потребує масштабування і горизонтального прокручування.
+              </li>
+              <li>
+                <b>Адаптивний дизайн</b> — сукупність технік і концепцій
+                верстки, розробки та дизайну сайтів, що забезпечують коректне
+                відображення на різних пристроях.
+              </li>
+              <li>
+                <b>Viewport (в’юпорт)</b> — область вікна браузера, яку бачить
+                користувач на екрані будь-якого пристрою.
+              </li>
+              <li>
+                <b>Директива (@-правило)</b> — інструкція в CSS, що починається
+                із символу <code>@</code> і визначає, як браузер має обробити
+                наступний за нею блок.
+              </li>
+              <li>
+                <b>Медіазапит</b> — конструкція, яка оголошується директивою
+                <code>@media</code> і застосовує вкладені CSS-правила лише тоді,
+                коли виконується задана умова.
+              </li>
+              <li>
+                <b>Медіатип</b> — тип пристрою виведення: <code>all</code>,
+                <code>screen</code>, <code>print</code>, <code>speech</code>.
+              </li>
+              <li>
+                <b>Медіафункція</b> — логічний вираз, що перевіряє
+                характеристику пристрою (наприклад, ширину в’юпорту) і повертає
+                істину або хибність.
+              </li>
+              <li>
+                <b>Логічні оператори</b> — <code>and</code>, <code>not</code>,
+                <code>only</code> і кома; поєднують умови в одному запиті.
+              </li>
+              <li>
+                <b>Брейкпойнт (breakpoint)</b> — значення ширини в’юпорту, за
+                якого змінюється макет, тобто спрацьовує медіазапит.
+              </li>
+              <li>
+                <b>Mobile First</b> — підхід, за якого спочатку розробляють
+                мобільну версію, а потім розширюють її для більших екранів
+                (<code>min-width</code>).
+              </li>
+              <li>
+                <b>Desktop First</b> — підхід, за якого спочатку розробляють
+                десктопну версію, а потім спрощують її для менших екранів
+                (<code>max-width</code>).
+              </li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <h3>🔭 Метатег viewport</h3>
+            <pre><code>&lt;meta name="viewport"
+  content="width=device-width,
+  initial-scale=1"&gt;</code></pre>
+            <p>
+              <code>width=device-width</code> — ширина в’юпорту дорівнює ширині
+              екрана пристрою. <code>initial-scale=1</code> — початковий масштаб
+              100%.
+            </p>
+            <p>
+              Без цього метатега мобільні браузери використовують умовну ширину
+              близько 980px і зменшують сторінку. Значення
+              <code>user-scalable=no</code> не рекомендується: воно обмежує
+              доступність сайту.
+            </p>
+          </div>
+
+          <div class="card">
+            <h3>🧩 Синтаксис медіазапиту</h3>
+            <pre><code>@media only|not тип and (умова) {
+  /* CSS-правила */
+}</code></pre>
+            <p>
+              Якщо медіатип не вказано, використовується значення за
+              замовчуванням — <code>all</code>.
+            </p>
+            <p>
+              <code>min-width: 600px</code> — умова виконується, коли ширина
+              в’юпорту <b>600px і більше</b>.<br /><code>max-width: 600px</code>
+              — умова виконується, коли ширина в’юпорту <b>600px і менше</b>.
+            </p>
+          </div>
+
+          <div class="card">
+            <h3>🖨️ Медіатипи</h3>
+            <ul>
+              <li>
+                <code>all</code> — усі пристрої (значення за замовчуванням);
+              </li>
+              <li><code>screen</code> — екран пристрою;</li>
+              <li>
+                <code>print</code> — друкувальні пристрої, наприклад принтер;
+              </li>
+              <li>
+                <code>speech</code> — мовні синтезатори та програми для
+                відтворення тексту вголос.
+              </li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <h3>🔗 Логічні оператори</h3>
+            <ul>
+              <li>
+                <code>and</code> — усі умови мають виконуватися одночасно:
+                <code>(min-width: 600px) and (max-width: 900px)</code>;
+              </li>
+              <li>
+                кома <code>,</code> — достатньо виконання хоча б однієї умови
+                («або»);
+              </li>
+              <li><code>not</code> — інвертує результат усього запиту;</li>
+              <li>
+                <code>only</code> — приховує запит від застарілих браузерів; у
+                сучасних браузерах результат не змінює.
+              </li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <h3>📱 Шаблон Mobile First</h3>
+            <pre><code>/* базові стилі: мобільна версія,
+   медіазапит не потрібен */
+.menu { display: flex;
+  flex-direction: column; }
+
+/* від 768px: планшет і більші */
+@media (min-width: 768px) {
+  .menu { flex-direction: row; }
+}</code></pre>
+          </div>
+
+          <div class="card">
+            <h3>📐 Орієнтири для брейкпойнтів</h3>
+            <ul>
+              <li>~600px — великий телефон;</li>
+              <li>~768px — планшет;</li>
+              <li>~1024px — ноутбук;</li>
+              <li>~1440px — великий монітор.</li>
+            </ul>
+            <p>
+              Це орієнтири, а не стандарт. Брейкпойнт ставлять там, де макет
+              втрачає зручність читання, а не під конкретну модель пристрою.
+            </p>
+          </div>
+
+          <div class="card">
+            <h3>🧱 Flexbox: основні властивості</h3>
+            <ul>
+              <li>
+                <code>display: flex</code> — робить елемент flex-контейнером;
+              </li>
+              <li>
+                <code>flex-direction: column | row</code> — напрямок осі:
+                стовпчик або рядок;
+              </li>
+              <li>
+                <code>flex-wrap: wrap</code> — дозволяє переносити елементи на
+                новий рядок;
+              </li>
+              <li>
+                <code>flex: 1 1 200px</code> — елемент може збільшуватися та
+                стискатися, бажана ширина — 200px.
+              </li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <h3>✅ Контрольний список</h3>
+            <ul>
+              <li>Додано метатег viewport.</li>
+              <li>Відсутнє горизонтальне прокручування.</li>
+              <li>Базові стилі підходять для мобільного екрана.</li>
+              <li>
+                Немає фіксованої ширини блоків у <code>px</code>, більшої за
+                екран телефона.
+              </li>
+              <li>Не використано <code>width: 100vw</code>.</li>
+              <li>Сторінку перевірено в DevTools (F12) за різної ширини.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+    </main>
+    <footer class="wrap">
+      Адаптивна верстка · інтерактивний урок. Спробуй змінити ширину вікна цієї
+      сторінки: вона теж адаптивна 😉
+    </footer>
+
+    <script>
+      // Theme
+      document.getElementById("theme").onclick = function () {
+        var r = document.documentElement,
+          dark =
+            getComputedStyle(r).getPropertyValue("--bg").trim() === "#0f1220";
+        r.setAttribute("data-theme", dark ? "light" : "dark");
+      };
+      // Principles tabs
+      document.querySelectorAll("[data-p]").forEach(function (b) {
+        b.onclick = function () {
+          document.querySelectorAll("[data-p]").forEach(function (x) {
+            x.setAttribute("aria-selected", x === b);
+          });
+          document.getElementById("mf").hidden = b.dataset.p !== "mf";
+          document.getElementById("df").hidden = b.dataset.p !== "df";
+        };
+      });
+      // Lab
+      var demo =
+        '<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><style>' +
+        "*{box-sizing:border-box}body{margin:0;font:14px system-ui,sans-serif;background:#fff;color:#222;transition:background .2s}" +
+        "header{background:#5b5bf0;color:#fff;padding:12px;font-weight:700}" +
+        ".row{display:flex;flex-wrap:wrap;gap:8px;padding:10px}" +
+        ".item{flex:1 1 100%;background:#eef;border-radius:8px;padding:14px;text-align:center;font-weight:600}" +
+        "p{padding:0 12px;margin:4px 0 12px}" +
+        '@media (min-width:600px){body{background:#fff8e6}.item{flex-basis:calc(50% - 8px)}header::after{content:" · планшет"}}' +
+        '@media (min-width:900px){body{background:#e8fbf3}.item{flex-basis:calc(33.333% - 8px)}header::after{content:" · десктоп"}}' +
+        '</style></head><body><header>Мій сайт</header><p>Змінюється фон і кількість колонок.</p><div class="row">' +
+        '<div class="item">🎮 Ігри</div><div class="item">🎵 Музика</div><div class="item">📷 Фото</div><div class="item">🎬 Відео</div><div class="item">📚 Книги</div><div class="item">⚽ Спорт</div></div></body></html>';
+      var fr = document.getElementById("fr"),
+        w = document.getElementById("w"),
+        wl = document.getElementById("wl"),
+        st = document.getElementById("state");
+      fr.srcdoc = demo;
+      function setW(v) {
+        v = +v;
+        w.value = v;
+        fr.style.width = v + "px";
+        wl.textContent = v + "px";
+        var cols = v >= 900 ? 3 : v >= 600 ? 2 : 1;
+        st.textContent =
+          "Спрацювали: " +
+          (v >= 900
+            ? "min-width: 600px і min-width: 900px"
+            : v >= 600
+              ? "min-width: 600px"
+              : "жоден медіа-запит (базові стилі для телефона)") +
+          " → колонок: " +
+          cols;
+      }
+      w.oninput = function () {
+        setW(w.value);
+      };
+      document.querySelectorAll("[data-w]").forEach(function (b) {
+        b.onclick = function () {
+          setW(b.dataset.w);
+        };
+      });
+      setW(360);
+      // Viewport
+      var vpEl = document.getElementById("vp");
+      function updVp() {
+        vpEl.textContent =
+          window.innerWidth + " × " + window.innerHeight + " px";
+      }
+      updVp();
+      window.addEventListener("resize", updVp);
+      var vpf = document.getElementById("vpf"),
+        vno = document.getElementById("vno"),
+        vyes = document.getElementById("vyes"),
+        vtxt = document.getElementById("vtxt");
+      vpf.srcdoc =
+        '<!DOCTYPE html><html><head><style>*{box-sizing:border-box}body{margin:0;font:16px system-ui,sans-serif}header{background:#5b5bf0;color:#fff;padding:14px;font-weight:700}.g{display:flex;flex-direction:column;gap:10px;padding:12px}.c{flex:1;background:#eef;border-radius:8px;padding:16px;text-align:center}p{padding:0 12px}@media (min-width:600px){.g{flex-direction:row}header::after{content:" · десктопна версія"}}</style></head><body><header>Мій сайт</header><p>Звичайний текст у 16px.</p><div class="g"><div class="c">Блок 1</div><div class="c">Блок 2</div><div class="c">Блок 3</div></div></body></html>';
+      function vpMode(on) {
+        vno.setAttribute("aria-selected", !on);
+        vyes.setAttribute("aria-selected", on);
+        if (on) {
+          vpf.style.width = "360px";
+          vpf.style.height = "300px";
+          vpf.style.transform = "none";
+          vtxt.textContent =
+            "Viewport = 360px. Браузер показує мобільну версію: один стовпчик, текст читається без зуму.";
+        } else {
+          vpf.style.width = "980px";
+          vpf.style.height = "820px";
+          vpf.style.transform = "scale(.367)";
+          vtxt.textContent =
+            "Браузер вважає, що viewport = 980px. Спрацювала десктопна версія, яку стиснули в 2,7 раза: текст крихітний, треба зумити.";
+        }
+      }
+      vno.onclick = function () {
+        vpMode(false);
+      };
+      vyes.onclick = function () {
+        vpMode(true);
+      };
+      vpMode(false);
+      // Flex lab
+      var demo2 =
+        '<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><style>' +
+        "*{box-sizing:border-box}body{margin:0;font:14px system-ui,sans-serif;color:#222;background:#fff}" +
+        ".menu{display:flex;flex-direction:column;gap:6px;padding:8px;background:#5b5bf0}" +
+        ".menu b{background:#fff;border-radius:6px;padding:8px;text-align:center}" +
+        ".layout{display:flex;flex-direction:column;gap:8px;padding:8px}" +
+        ".side{flex:0 0 auto;background:#ffe9a8;border-radius:8px;padding:10px}" +
+        ".main{flex:1}" +
+        ".cards{display:flex;flex-wrap:wrap;gap:8px}" +
+        ".cards div{flex:1 1 130px;background:#d9f7ee;border-radius:8px;padding:14px;text-align:center}" +
+        "@media (min-width:600px){.menu{flex-direction:row;justify-content:space-between}.menu b{flex:1}}" +
+        "@media (min-width:900px){.layout{flex-direction:row}.side{flex:0 0 160px}}" +
+        '</style></head><body><div class="menu"><b>Головна</b><b>Новини</b><b>Галерея</b><b>Контакти</b></div>' +
+        '<div class="layout"><div class="side">Бічна панель</div><div class="main"><div class="cards">' +
+        "<div>🎮 1</div><div>🎵 2</div><div>📷 3</div><div>🎬 4</div><div>📚 5</div><div>⚽ 6</div></div></div></div></body></html>";
+      var fr2 = document.getElementById("fr2"),
+        w2 = document.getElementById("w2");
+      fr2.srcdoc = demo2;
+      w2.oninput = function () {
+        fr2.style.width = w2.value + "px";
+        document.getElementById("wl2").textContent = w2.value + "px";
+      };
+      // Quiz
+      var Q = [
+        [
+          "Що означає принцип Mobile First?",
+          [
+            "Спочатку верстаємо десктоп",
+            "Спочатку верстаємо мобільну версію й додаємо для більших екранів",
+            "Сайт працює лише на телефонах",
+          ],
+          1,
+          "Так: базові стилі для телефона, а потім media (min-width) додає можливості для великих екранів.",
+        ],
+        [
+          "Коли спрацює @media (min-width: 900px)?",
+          [
+            "Коли ширина в’юпорту 900px і більше",
+            "Коли ширина менша за 900px",
+            "Лише на принтері",
+          ],
+          0,
+          "min-width — це мінімальна межа: від 900px і ширше.",
+        ],
+        [
+          "Який метатег потрібен, щоб сайт правильно показувався на телефоні?",
+          [
+            "<meta charset>",
+            '<meta name="viewport" …>',
+            '<meta name="author">',
+          ],
+          1,
+          "Саме viewport каже телефону не імітувати «великий екран».",
+        ],
+        [
+          "Що таке viewport?",
+          [
+            "Весь екран разом із рамкою пристрою",
+            "Область, яку користувач бачить на екрані, коли відкриває сайт",
+            "Файл зі стилями сторінки",
+          ],
+          1,
+          "Viewport — видима область сторінки. Саме її ширину перевіряють медіа-запити min-width і max-width.",
+        ],
+        [
+          "Чому не варто писати user-scalable=no у метатезі viewport?",
+          [
+            "Це зламає CSS",
+            "Людям зі слабким зором потрібне збільшення",
+            "Тег перестане працювати",
+          ],
+          1,
+          "Заборона зуму шкодить доступності, тому її не використовують.",
+        ],
+        [
+          "Що таке брейкпойнт (breakpoint)?",
+          [
+            "Помилка в CSS-коді",
+            "Значення ширини в’юпорту, при якому макет змінюється",
+            "Назва браузера",
+          ],
+          1,
+          "Брейкпойнт — «точка зламу», наприклад 768px у @media (min-width: 768px).",
+        ],
+        [
+          "Яка функція дає плавну зміну розміру без медіа-запитів?",
+          ["clamp()", "alert()", "float"],
+          0,
+          "clamp(мін, бажане, макс) плавно змінюється між двома межами.",
+        ],
+        [
+          "Який медіа-тип використовують для стилів друку?",
+          ["screen", "print", "speech"],
+          1,
+          "print — для принтерів. screen — екрани, speech — озвучення, all — усі (за замовчуванням).",
+        ],
+        [
+          "Яка ознака поганої адаптивної верстки?",
+          [
+            "Немає горизонтального скролу",
+            "Текст читається без масштабування",
+            "Треба гортати сторінку вбік",
+          ],
+          2,
+          "Горизонтальний скролінг — головна ознака того, що адаптив не доопрацьований.",
+        ],
+      ];
+      var qb = document.getElementById("qbox"),
+        sc = document.getElementById("score"),
+        done = 0,
+        good = 0;
+      Q.forEach(function (q, i) {
+        var d = document.createElement("div");
+        d.className = "q";
+        var h = document.createElement("h3");
+        h.textContent = i + 1 + ". " + q[0];
+        d.appendChild(h);
+        var o = document.createElement("div");
+        o.className = "opts";
+        var e = document.createElement("p");
+        e.className = "exp";
+        q[1].forEach(function (t, j) {
+          var b = document.createElement("button");
+          b.type = "button";
+          b.className = "opt";
+          b.textContent = t;
+          b.onclick = function () {
+            o.querySelectorAll("button").forEach(function (x, k) {
+              x.disabled = true;
+              if (k === q[2]) x.classList.add("ok");
+            });
+            if (j === q[2]) {
+              good++;
+            } else {
+              b.classList.add("no");
+            }
+            e.textContent = q[3];
+            done++;
+            if (done === Q.length) {
+              sc.textContent =
+                "Твій результат: " +
+                good +
+                " з " +
+                Q.length +
+                (good === Q.length
+                  ? " 🏆 Ти майстер адаптиву!"
+                  : good >= 3
+                    ? " 👍 Добре!"
+                    : " — перечитай теорію і спробуй ще раз 💪");
+            }
+          };
+          o.appendChild(b);
+        });
+        d.appendChild(o);
+        d.appendChild(e);
+        qb.appendChild(d);
+      });
+
+      // Navigation: compact contents menu, highlighted section, keyboard support.
+      (function () {
+        const menu = document.getElementById("lessonMenu");
+        const button = document.getElementById("lessonMenuButton");
+        const location = document.getElementById("navLocation");
+        const sections = Array.from(
+          document.querySelectorAll("main > section[id]"),
+        );
+        const links = Array.from(menu.querySelectorAll("a[data-section-link]"));
+        const titles = new Map(
+          links.map((a, i) => [
+            a.dataset.sectionLink,
+            {
+              title: a.querySelector("span:last-child").textContent,
+              index: i + 1,
+            },
+          ]),
+        );
+        const backdrop = document.getElementById("lessonMenuBackdrop");
+        const nav = document.querySelector(".lesson-nav");
+        const mobile = window.matchMedia("(max-width:700px)");
+        function show(open) {
+          if (open && mobile.matches) {
+            // Make the navigation visible before opening the sheet.
+            const navTop = nav.getBoundingClientRect().top;
+            if (navTop > window.innerHeight * 0.3) {
+              window.scrollBy({
+                top: navTop - window.innerHeight * 0.08,
+                behavior: "instant",
+              });
+            }
+            menu.style.setProperty(
+              "--menu-top",
+              Math.max(0, Math.round(nav.getBoundingClientRect().bottom)) +
+                "px",
+            );
+          }
+          menu.hidden = !open;
+          backdrop.hidden = !open || !mobile.matches;
+          button.setAttribute("aria-expanded", String(open));
+          document.documentElement.classList.toggle(
+            "lesson-menu-open",
+            open && mobile.matches,
+          );
+          document.body.classList.toggle(
+            "lesson-menu-open",
+            open && mobile.matches,
+          );
+          if (open) {
+            menu.scrollTop = 0;
+          }
+        }
+        button.addEventListener("click", () => show(menu.hidden));
+        menu.addEventListener("click", (e) => {
+          if (e.target.closest("a")) show(false);
+        });
+        backdrop.addEventListener("click", () => show(false));
+        document.addEventListener("keydown", (e) => {
+          if (e.key === "Escape" && !menu.hidden) {
+            show(false);
+            button.focus();
+          }
+        });
+        document.addEventListener("click", (e) => {
+          if (
+            !menu.hidden &&
+            !e.target.closest(".lesson-nav") &&
+            !e.target.closest("#lessonMenuBackdrop")
+          )
+            show(false);
+        });
+        mobile.addEventListener("change", () => show(false));
+        function setActive(id) {
+          const entry = titles.get(id);
+          if (!entry) return;
+          location.textContent =
+            String(entry.index).padStart(2, "0") +
+            " / " +
+            sections.length +
+            " · " +
+            entry.title;
+          links.forEach((a) => {
+            const active = a.dataset.sectionLink === id;
+            a.classList.toggle("active", active);
+            if (active) a.setAttribute("aria-current", "location");
+            else a.removeAttribute("aria-current");
+          });
+        }
+        if ("IntersectionObserver" in window) {
+          const observer = new IntersectionObserver(
+            (entries) => {
+              const near = sections.filter(
+                (s) =>
+                  s.getBoundingClientRect().top < window.innerHeight * 0.42,
+              );
+              if (near.length) setActive(near[near.length - 1].id);
+            },
+            { rootMargin: "-10% 0px -65% 0px", threshold: 0 },
+          );
+          sections.forEach((s) => observer.observe(s));
+        }
+        const update = () => {
+          const visible = sections.filter(
+            (s) => s.getBoundingClientRect().top <= window.innerHeight * 0.4,
+          );
+          setActive((visible[visible.length - 1] || sections[0]).id);
+        };
+        window.addEventListener("scroll", update, { passive: true });
+        window.addEventListener("resize", update, { passive: true });
+        window.addEventListener("hashchange", () => {
+          show(false);
+          setTimeout(update, 100);
+        });
+        update();
+      })();
+    </script>
+  </body>
+</html>
